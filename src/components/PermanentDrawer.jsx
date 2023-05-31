@@ -1,19 +1,29 @@
-import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import CustomerIcon from '@mui/icons-material/People';
+import SalesIcon from '@mui/icons-material/Sell';
+import PurchaseIcon from '@mui/icons-material/ShoppingCart';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import Collapse from '@mui/material/Collapse';
+import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import { useState } from 'react';
 
 const drawerWidth = 240;
 
 const PermanentDrawer = ()=>{
+    const [open, setOpen] = useState(true);
+
+    function handleClick(){
+        setOpen(!open);
+    };
+
     return(
         <Drawer sx={{width:drawerWidth,
                     flexShrink:0,
@@ -27,18 +37,31 @@ const PermanentDrawer = ()=>{
                 <Toolbar />
                 <Divider />
                 <List>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            {/* <ListItemIcon><InboxIcon/></ListItemIcon> */}
-                            <ListItemText primary={'Inbox'}/>
+                    <ListItemButton>
+                        <ListItemIcon><CustomerIcon/></ListItemIcon>
+                        <ListItemText primary={'Customers'}/>
+                    </ListItemButton>
+                    <ListItemButton onClick={handleClick}>
+                        <ListItemIcon><SalesIcon/></ListItemIcon>
+                        <ListItemText primary={'Sales'}/>
+                        {open ? <ExpandLess /> :<ExpandMore/>}
+                    </ListItemButton>
+                    <Collapse in={open} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                        <ListItemButton sx={{ pl: 4 }}>
+                            <ListItemIcon><CurrencyRupeeIcon/></ListItemIcon>
+                            <ListItemText primary="Invoice" />
                         </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding>
-                        <ListItemButton>
-                            {/* <ListItemIcon><MailIcon/></ListItemIcon> */}
-                            <ListItemText primary={'New Mail'}/>
+                        <ListItemButton sx={{ pl: 4 }}>
+                            <ListItemIcon><ReceiptIcon/></ListItemIcon>
+                            <ListItemText primary="Delivery Challan" />
                         </ListItemButton>
-                    </ListItem>
+                        </List>
+                    </Collapse>
+                    <ListItemButton>
+                        <ListItemIcon><PurchaseIcon/></ListItemIcon>
+                        <ListItemText primary={'Purchase'}/>
+                    </ListItemButton>
                 </List>
         </Drawer>
     );
