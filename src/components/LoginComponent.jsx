@@ -11,11 +11,6 @@ const LoginComponent = ()=>{
             width: '100%',
             height: '100%',
             backgroundColor: '#fff',
-            // display: 'flex',
-            // flexDirection: 'column',
-            // alignItems: 'center',
-            // justifyContent: 'center',
-            // gap: '1rem',
             }}>
                 <AppBar><Toolbar><Typography variant="h4" component="div">Power-Invoice</Typography></Toolbar></AppBar>
                 <Box sx={{
