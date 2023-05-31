@@ -13,6 +13,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import InventoryIcon from '@mui/icons-material/Inventory';
 import { useState } from 'react';
 
 const drawerWidth = 240;
@@ -61,6 +62,10 @@ const PermanentDrawer = ()=>{
                     <ListItemButton>
                         <ListItemIcon><PurchaseIcon/></ListItemIcon>
                         <ListItemText primary={'Purchase'}/>
+                    </ListItemButton>
+                    <ListItemButton>
+                        <ListItemIcon><InventoryIcon/></ListItemIcon>
+                        <ListItemText primary={'Inventory'}/>
                     </ListItemButton>
                 </List>
         </Drawer>
