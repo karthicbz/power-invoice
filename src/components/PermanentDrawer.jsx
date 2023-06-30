@@ -14,9 +14,10 @@ import Collapse from '@mui/material/Collapse';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import ReceiptIcon from '@mui/icons-material/Receipt';
 import InventoryIcon from '@mui/icons-material/Inventory';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
-const drawerWidth = 240;
+export const drawerWidth = 240;
 
 const PermanentDrawer = ()=>{
     const [open, setOpen] = useState(true);
@@ -38,10 +39,12 @@ const PermanentDrawer = ()=>{
                 <Toolbar />
                 <Divider />
                 <List>
-                    <ListItemButton>
-                        <ListItemIcon><CustomerIcon/></ListItemIcon>
-                        <ListItemText primary={'Customers'}/>
-                    </ListItemButton>
+                    <Link to={'/customerdetail'}>
+                        <ListItemButton>
+                            <ListItemIcon><CustomerIcon/></ListItemIcon>
+                            <ListItemText primary={'Customers'}/>
+                        </ListItemButton>
+                    </Link>
                     <ListItemButton onClick={handleClick}>
                         <ListItemIcon><SalesIcon/></ListItemIcon>
                         <ListItemText primary={'Sales'}/>

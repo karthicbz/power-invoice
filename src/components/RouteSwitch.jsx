@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginComponent from "./LoginComponent";
+import CustomerDetail from "./CustomerDetail";
 import Mainpage from "./Mainpage";
 
 const RouteSwitch = ()=>{
@@ -8,6 +9,7 @@ const RouteSwitch = ()=>{
             <Routes>
                 <Route path="/" element={<LoginComponent/>}/>
                 <Route path="/mainpage" element={<Mainpage/>}/>
+                <Route path="/customerdetail" element={<CustomerDetail/>}/>
             </Routes>
         </BrowserRouter>
     );
