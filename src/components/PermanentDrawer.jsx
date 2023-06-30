@@ -35,6 +35,7 @@ const PermanentDrawer = ()=>{
                     }}}
                     variant="permanent"
                     anchor='left'
+                    className='permanent-drawer'
                     >
                 <Toolbar />
                 <Divider />
