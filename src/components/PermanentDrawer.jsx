@@ -16,6 +16,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { Typography } from '@mui/material';
 
 export const drawerWidth = 240;
 
@@ -37,7 +38,9 @@ const PermanentDrawer = ()=>{
                     anchor='left'
                     className='permanent-drawer'
                     >
-                <Toolbar />
+                <Toolbar sx={{background:"#1976d2"}}>
+                    <Typography variant='h6' sx={{margin:'0 auto', color:'#fff'}}>Power-invoice</Typography>
+                </Toolbar>
                 <Divider />
                 <List>
                     <Link to={'/customerdetail'}>
