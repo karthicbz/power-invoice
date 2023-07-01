@@ -1,8 +1,9 @@
-import { TextField, Button } from "@mui/material";
+import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import MaterialButton from "./Button";
 
 const CustomerDetailInput = ()=>{
     const [companyname, setCompanyname] = useState('');
@@ -13,6 +14,11 @@ const CustomerDetailInput = ()=>{
     const [allFieldsValid, setAllFieldsValid] = useState(false);
     
     function hideInputFields(e){
+        setCompanyname('');
+        setCompanyphone('');
+        setCompanyemail('');
+        setCompanygst('');
+        setCompanyaddress('');
         const inputFields = document.querySelector('.customer-detail-input');
         const newCustomerField = document.querySelector('.newCustomer');
         newCustomerField.childNodes[0].style.display = 'block';
@@ -48,6 +54,11 @@ const CustomerDetailInput = ()=>{
                 closeOnClick: true,
             })
         }else{
+            setCompanyname('');
+            setCompanyphone('');
+            setCompanyemail('');
+            setCompanygst('');
+            setCompanyaddress('');
             toast.success(data.data,{
                 position:'bottom-center',
                 autoClose: 5000,
@@ -118,10 +129,10 @@ const CustomerDetailInput = ()=>{
                 value={companyaddress}
                 onChange={handleCompanyaddress} required/>
             {allFieldsValid?
-                <Button variant="contained" onClick={saveCompanyDetails} id="addCompany">Add Company</Button>:
-                <Button variant="contained" onClick={saveCompanyDetails} id="addCompany" disabled>Add Company</Button>
+                <MaterialButton variant="contained" handleFunction={saveCompanyDetails} id="addCompany" text="Add Company" isDisabled={false}/>:
+                <MaterialButton variant="contained" id="addCompany" text="Add Company" isDisabled={true} />
             }
-            <Button variant="outlined" onClick={hideInputFields} id="addCompanyCancel">Cancel</Button>
+            <MaterialButton variant="outlined" handleFunction={hideInputFields} id="addCompanyCancel" text="Cancel"/>
             <ToastContainer/>
         </Box>
     );
