@@ -58,7 +58,7 @@ const CustomerDetail = ()=>{
                     <TextField id="outlined-basic" variant="outlined" placeholder="Create New Customer" className="newCustomer" onClick={showInputFields}/>
                     <CustomerDetailInput/>
                 </Box>
-                <Box classname="customers-list">
+                <Box className="customers-list">
                     <p>Customer details</p>
                 </Box>
             </ChildGrid>
