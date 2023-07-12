@@ -29,7 +29,7 @@ const InvoiceModal = ({open, handleClose})=>{
     const [itemSearchInput, setItemSearchInput] = useState('');
     const [itemSearchActive, setItemSearchActive] = useState(false);
     const [rows, setRows] = useState([]);
-    let [total, setTotal] = useState(0);
+    const [total, setTotal] = useState(0);
 
     async function searchCustomer(){
         const response = await fetch(`http://localhost:3001/powerinvoice/customers/search?text=${input}`, {mode:'cors'});
@@ -63,14 +63,13 @@ const InvoiceModal = ({open, handleClose})=>{
         }
     },[input, open])
 
-    // useEffect(()=>{
-    //     setTotal(0);
-    //     console.log(total);
-    //     rows.forEach(item=>{
-    //         // console.log(item);
-    //         console.log(item.amount);
-    //     });
-    // }, [rows]);
+    useEffect(()=>{
+        setTotal(0);
+        // console.log(total);
+        rows.forEach(row=>{
+            setTotal(prevTotal => prevTotal + row.amount);
+        });
+    }, [rows]);
 
     function handleClick(e){
         setChoosenCustomer(customerDetails.filter(customer=>{
@@ -118,6 +117,7 @@ const InvoiceModal = ({open, handleClose})=>{
             setRows([...rows, newData]);
         }
         setItemDetails([]);
+        setItemSearchActive(false);
     }
 
     function getRows(id, prop, value){
