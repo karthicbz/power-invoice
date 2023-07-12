@@ -1,12 +1,17 @@
 import PermanentDrawer from "./PermanentDrawer";
-import { Box, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { drawerWidth } from "./PermanentDrawer";
 import { styled } from "styled-components";
 import CustomerDetailInput from "./CustomerDetailInput";
 import CustomerDetailsList from "./CustomerDetailsList";
 import { useEffect, useState } from "react";
+import BoxModal from "./modal";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+import EditCustomerDetailsModal from "./EditCustomerDetailsModal";
 
-const ParentGrid = styled.div`
+
+export const ParentGrid = styled.div`
     display: grid;
     grid-template-columns: ${drawerWidth}px 1fr;
     grid-template-rows: 1fr;
@@ -25,28 +30,33 @@ const ParentGrid = styled.div`
     }
 `;
 
-const ChildGrid = styled.div`
+export const ChildGrid = styled.div`
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: max-content 1fr;
+`;
 
-    &>.customer-input-section{
-        grid-column: 1/2;
-        grid-row: 1/2;
-        padding: 0 1rem;
-        display: grid;
-        gap: 1rem;
-    }
+const StyledInputSection = styled(ChildGrid)`
+    grid-column: 1/2;
+    grid-row: 1/2;
+    padding: 0 1rem;
+    display: grid;
+    gap: 1rem;
+`;
 
-    &>.customers-list{
-        grid-column: 1/2;
-        grid-row: 2/3;
-    }
+const StyledCustomerList = styled(ChildGrid)`
+    grid-column: 1/2;
+    grid-row: 2/3;
 `;
 
 
 const CustomerDetail = ()=>{
     const [customerDetails, setCustomerDetails] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [customerName, setCustomerName] = useState('');
+    const [customerId, setCustomerId] = useState('');
+    const [customerToUpdate, setCustomerToUpdate] = useState({});
 
     function showInputFields(e){
         const inputFields = document.querySelector('.customer-detail-input');
@@ -61,6 +71,55 @@ const CustomerDetail = ()=>{
         setCustomerDetails(data);
     }
 
+    async function deleteCustomerDetail(){
+        setOpen(false);
+        const response = await toast.promise(
+            fetch(`http://localhost:3001/powerinvoice/customers/${customerId}/delete`, {mode:'cors'}),
+            {pending:'Deleting customer'},
+            {position:'bottom-center'}
+        );
+        const data = await response.json();
+        if(data.status === 'success'){
+            await getCustomerDetails();
+            toast.success(data.data,{
+                position:'bottom-center',
+                autoClose: 5000,
+                closeOnClick: true,
+            })
+        }else{
+            toast.error(data.data,{
+                position:'bottom-center',
+                autoClose: 5000,
+                closeOnClick: true,
+            })
+        }
+    }
+
+    function handleOpen(e){
+        setCustomerName(e.target.dataset.listname);
+        setCustomerId(e.target.dataset.listid);
+        setOpen(true);
+    }
+
+    function handleClose(){
+        setOpen(false);
+    }
+
+    function editModalOpen(e){
+        customerDetails.filter(cd=>{
+            if(cd._id === e.target.dataset.listid){
+                return setCustomerToUpdate(cd);
+            }
+            return null;
+        })
+        setOpenEditModal(true);
+    }
+
+    function editModalClose(){
+        setCustomerToUpdate({});
+        setOpenEditModal(false);
+    }
+
     useEffect(()=>{
         getCustomerDetails();
     }, [])
@@ -69,15 +128,18 @@ const CustomerDetail = ()=>{
         <ParentGrid>
             <PermanentDrawer/>
             <ChildGrid className="customer-info">
-                <Box className="customer-input-section">
+                <StyledInputSection className="customer-input-section">
                     <TextField id="outlined-basic" variant="outlined" placeholder="Create New Customer" className="newCustomer" onClick={showInputFields}/>
-                    <CustomerDetailInput/>
-                </Box>
-                <Box className="customers-list">
+                    <CustomerDetailInput refreshCustomerList={getCustomerDetails}/>
+                </StyledInputSection>
+                <StyledCustomerList className="customers-list">
                     {/* <p>Customer details</p> */}
-                    <CustomerDetailsList data={customerDetails}/>
-                </Box>
+                    <CustomerDetailsList data={customerDetails} handleOpenFunc={handleOpen} handleEditOpenFunc={editModalOpen}/>
+                </StyledCustomerList>
+                <BoxModal open={open} handleClose={handleClose} customerName={customerName} handleDelete={deleteCustomerDetail}/>
+                <EditCustomerDetailsModal open={openEditModal} handleClose={editModalClose} customerDetails={customerToUpdate} refreshCustomerList={getCustomerDetails}/>
             </ChildGrid>
+            <ToastContainer/>
         </ParentGrid>
     );
 };

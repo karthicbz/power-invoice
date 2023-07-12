@@ -1,11 +1,11 @@
 import { TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import MaterialButton from "./Button";
 
-const CustomerDetailInput = ()=>{
+const CustomerDetailInput = ({refreshCustomerList})=>{
     const [companyname, setCompanyname] = useState('');
     const [companyemail, setCompanyemail] = useState('');
     const [companyphone, setCompanyphone] = useState('');
@@ -13,7 +13,7 @@ const CustomerDetailInput = ()=>{
     const [companyaddress, setCompanyaddress] = useState('');
     const [allFieldsValid, setAllFieldsValid] = useState(false);
     
-    function hideInputFields(e){
+    function hideInputFields(){
         setCompanyname('');
         setCompanyphone('');
         setCompanyemail('');
@@ -59,11 +59,13 @@ const CustomerDetailInput = ()=>{
             setCompanyemail('');
             setCompanygst('');
             setCompanyaddress('');
+            hideInputFields();
             toast.success(data.data,{
                 position:'bottom-center',
                 autoClose: 5000,
                 closeOnClick: true,
             })
+            refreshCustomerList();
         }
     }   
 
@@ -133,7 +135,6 @@ const CustomerDetailInput = ()=>{
                 <MaterialButton variant="contained" id="addCompany" text="Add Company" isDisabled={true} />
             }
             <MaterialButton variant="outlined" handleFunction={hideInputFields} id="addCompanyCancel" text="Cancel"/>
-            <ToastContainer/>
         </Box>
     );
 }

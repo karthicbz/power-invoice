@@ -39,7 +39,7 @@ const PermanentDrawer = ()=>{
                     className='permanent-drawer'
                     >
                 <Toolbar sx={{background:"#1976d2"}}>
-                    <Typography variant='h6' sx={{margin:'0 auto', color:'#fff'}}>Power-invoice</Typography>
+                    <Typography variant='h6' sx={{margin:'0 auto', color:'#fff'}}><Link to={"/mainpage"}>Power-invoice</Link></Typography>
                 </Toolbar>
                 <Divider />
                 <List>
@@ -56,10 +56,12 @@ const PermanentDrawer = ()=>{
                     </ListItemButton>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <List component="div" disablePadding>
-                        <ListItemButton sx={{ pl: 4 }}>
-                            <ListItemIcon><CurrencyRupeeIcon/></ListItemIcon>
-                            <ListItemText primary="Invoice" />
-                        </ListItemButton>
+                            <Link to={"/invoice"}>
+                                <ListItemButton sx={{ pl: 4 }}>
+                                    <ListItemIcon><CurrencyRupeeIcon/></ListItemIcon>
+                                    <ListItemText primary="Invoice" />
+                                </ListItemButton>
+                            </Link>
                         <ListItemButton sx={{ pl: 4 }}>
                             <ListItemIcon><ReceiptIcon/></ListItemIcon>
                             <ListItemText primary="Delivery Challan" />
@@ -70,10 +72,12 @@ const PermanentDrawer = ()=>{
                         <ListItemIcon><PurchaseIcon/></ListItemIcon>
                         <ListItemText primary={'Purchase'}/>
                     </ListItemButton>
+                    <Link to={"https://inventory-9js7.onrender.com"} target='_blank' rel='noopener noreferrer'>
                     <ListItemButton>
                         <ListItemIcon><InventoryIcon/></ListItemIcon>
                         <ListItemText primary={'Inventory'}/>
                     </ListItemButton>
+                    </Link>
                 </List>
         </Drawer>
     );
