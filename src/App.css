@@ -15,3 +15,7 @@ html, body{
 .table-field>div>input{
   padding: 4px;
 }
+
+.table-cell{
+  padding: 0 8px;
+}

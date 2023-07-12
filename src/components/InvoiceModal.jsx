@@ -15,8 +15,8 @@ invoiceModalStyle['gap'] = "8px";
 
 const invoiceDetailsGrid = {
     display: 'grid',
-    'grid-template-columns': 'repeat(2, 1fr)',
-    'grid-template-rows': 'repeat(3, calc(100% / 3))',
+    'gridTemplateColumns': 'repeat(2, 1fr)',
+    'gridTemplateRows': 'repeat(3, calc(100% / 3))',
     gap: '8px',
 }
 
@@ -120,6 +120,12 @@ const InvoiceModal = ({open, handleClose})=>{
         setItemSearchActive(false);
     }
 
+    function deleteRowItem(id){
+        setRows(rows.filter(row=>{
+            return(row.id !== id);
+        }))
+    }
+
     function getRows(id, prop, value){
         // console.log(`id:${id}, prop:${prop}, value:${value}`);
         if(prop !== 'product'){
@@ -197,7 +203,7 @@ const InvoiceModal = ({open, handleClose})=>{
                         }
                     </List>
                 </Box>
-                <InvoiceTable rows={rows} getRows = {getRows} total={total}/>
+                <InvoiceTable rows={rows} getRows = {getRows} total={total} deleteRowItem={deleteRowItem}/>
                 <Button onClick={handleClose} variant="outlined">Close</Button>
             </Box>
         </Modal>

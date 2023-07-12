@@ -2,8 +2,9 @@ import TableCell from '@mui/material/TableCell';
 import { TextField } from '@mui/material';
 import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from 'react';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-const TableRowComponent = ({row, getRows})=>{
+const TableRowComponent = ({row, getRows, deleteRowItem})=>{
     const [productName, setProductName] = useState(row.product);
     const [hsn, sethsn] = useState(row.hsn);
     const [rate, setRate] = useState(row.rate);
@@ -50,9 +51,9 @@ const TableRowComponent = ({row, getRows})=>{
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             id={row.id}
             >
-            <TableCell component="th" scope="row">
+            <TableCell component="th" scope="row" sx={{padding:'4px 8px'}}>
             <TextField
-            data-fieldId = {row.id} 
+            data-fieldid = {row.id} 
             value={productName} 
             className='table-field'
             onChange={(e)=>{
@@ -60,36 +61,36 @@ const TableRowComponent = ({row, getRows})=>{
                 getRows(row.id, 'product', e.target.value);
             }}/>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
-            data-fieldId = {row.id} 
+            data-fieldid = {row.id} 
             value={hsn} 
             className='table-field'
             onChange={(e)=>{
                 sethsn(e.target.value);
                 getRows(row.id, 'hsn', e.target.value);
             }}/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
-            data-fieldId = {row.id}
+            data-fieldid = {row.id}
             value={rate} 
             className='table-field'
             onChange={(e)=>{
                 setRate(e.target.value)
                 getRows(row.id, 'rate', e.target.value);
             }}/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
-            data-fieldId = {row.id}
+            data-fieldid = {row.id}
             value={qty} 
             className='table-field'
             onChange={(e)=>{
                 setQty(e.target.value);
                 getRows(row.id, 'qty', e.target.value);
             }}/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
-            data-fieldId = {row.id}
+            data-fieldid = {row.id}
             value={cgstPer} 
             className='table-field'
             onChange={(e)=>{
@@ -97,14 +98,14 @@ const TableRowComponent = ({row, getRows})=>{
                 setCgstAmt(((rate*qty)*(e.target.value/100)).toFixed(2));
                 getRows(row.id, 'cgstPer', e.target.value);
                 }}/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField 
             value={cgstAmt} 
             className='table-field'
             /></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
-            data-fieldId = {row.id}
+            data-fieldid = {row.id}
             value={sgstPer} 
             className='table-field'
             onChange={(e)=>{
@@ -112,13 +113,13 @@ const TableRowComponent = ({row, getRows})=>{
                 setSgstAmt(((rate*qty)*(e.target.value/100)).toFixed(2));
                 getRows(row.id, 'sgstPer', e.target.value);
                 }}/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField 
             value={sgstAmt} 
             className='table-field'/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
-            data-fieldId = {row.id}
+            data-fieldid = {row.id}
             value={igstPer} 
             className='table-field'
             onChange={(e)=>{
@@ -126,14 +127,17 @@ const TableRowComponent = ({row, getRows})=>{
                 setIgstAmt(((rate*qty)*(e.target.value/100)).toFixed(2));
                 getRows(row.id, 'igstPer', e.target.value);
                 }}/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField 
             value={igstAmt} 
             className='table-field'/></TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField 
             value={amount}
             className='table-field'/></TableCell>
+            <TableCell sx={{padding:'4px 8px 4px 0'}} onClick={()=>deleteRowItem(row.id)}>
+                <RemoveCircleOutlineIcon sx={{color:'red'}}/>
+            </TableCell>
         </TableRow>
     );
 }
