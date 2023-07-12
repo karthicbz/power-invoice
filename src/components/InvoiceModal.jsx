@@ -63,14 +63,14 @@ const InvoiceModal = ({open, handleClose})=>{
         }
     },[input, open])
 
-    useEffect(()=>{
-        setTotal(0);
-        console.log(total);
-        rows.forEach(item=>{
-            // console.log(item);
-            console.log(item.amount);
-        });
-    }, [rows]);
+    // useEffect(()=>{
+    //     setTotal(0);
+    //     console.log(total);
+    //     rows.forEach(item=>{
+    //         // console.log(item);
+    //         console.log(item.amount);
+    //     });
+    // }, [rows]);
 
     function handleClick(e){
         setChoosenCustomer(customerDetails.filter(customer=>{
@@ -122,7 +122,10 @@ const InvoiceModal = ({open, handleClose})=>{
 
     function getRows(id, prop, value){
         // console.log(`id:${id}, prop:${prop}, value:${value}`);
-        value = parseInt(value);
+        if(prop !== 'product'){
+            value = parseFloat(value);
+        }
+        // console.log(`p:${prop}, v:${value}`);
         setRows(prevRows=>prevRows.map(item=>item.id === id?{...item, [prop]:value}:item));
     }
 
