@@ -47,7 +47,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
 
     return(
         <TableRow
-            key={row.id}
+            // key={row.id}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             id={row.id}
             >

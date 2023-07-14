@@ -6,6 +6,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import InvoiceTable from "./InvoiceTable";
+import {v4 as uuidv4} from 'uuid';
 
 const invoiceModalStyle = modalStyle;
 invoiceModalStyle['display'] = 'flex';
@@ -83,7 +84,7 @@ const InvoiceModal = ({open, handleClose})=>{
     }
 
     //below code is for invoice table
-    function createData(id, product, hsn, rate, qty, cgstPer, cgstAmt, sgstPer, sgstAmt, igstPer, igstAmt, amount) {
+    function createData(id, row_id, product, hsn, rate, qty, cgstPer, cgstAmt, sgstPer, sgstAmt, igstPer, igstAmt, amount) {
         cgstAmt = rate * (cgstPer/100);
         sgstAmt = rate * (sgstPer/100);
         igstAmt = rate * (igstPer/100);
@@ -92,7 +93,7 @@ const InvoiceModal = ({open, handleClose})=>{
         sgstPer = parseInt(sgstPer);
         igstPer = parseInt(igstPer);
         // console.log(`rate:${rate}, qty:${qty}, c:${cgstAmt}, s:${sgstAmt}, i:${igstAmt}`);
-        return { id, product, hsn, rate, qty, cgstPer, cgstAmt, sgstPer, sgstAmt, igstPer, igstAmt, amount };
+        return { id, row_id, product, hsn, rate, qty, cgstPer, cgstAmt, sgstPer, sgstAmt, igstPer, igstAmt, amount };
     }
       
     // let rows = [
@@ -113,7 +114,7 @@ const InvoiceModal = ({open, handleClose})=>{
         const matchedItem = itemDetails.find(item=>item._id === e.target.parentNode.id);
         if(matchedItem){
             setItemSearchInput('');
-            const newData = createData(matchedItem._id, matchedItem.name, matchedItem.hsn, matchedItem.price, 1, 9, 0, 9, 0, 9, 0, 0);
+            const newData = createData(matchedItem._id, uuidv4(), matchedItem.name, matchedItem.hsn, matchedItem.price, 1, 9, 0, 9, 0, 9, 0, 0);
             setRows([...rows, newData]);
         }
         setItemDetails([]);
@@ -121,9 +122,13 @@ const InvoiceModal = ({open, handleClose})=>{
     }
 
     function deleteRowItem(id){
-        setRows(rows.filter(row=>{
-            return(row.id !== id);
-        }))
+        const updatedRows = [...rows];
+        const index = rows.findIndex(row=>row.id === id);
+        if(index !== -1){
+            updatedRows.splice(index, 1);
+        }
+        // setRows([]);
+        setRows(updatedRows);
     }
 
     function getRows(id, prop, value){

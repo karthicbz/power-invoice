@@ -33,16 +33,18 @@ const InvoiceTable = ({rows, getRows, total, deleteRowItem})=>{
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRowComponent row={row} getRows={getRows} deleteRowItem={deleteRowItem}/>
+            <TableRowComponent row={row} getRows={getRows} deleteRowItem={deleteRowItem} key={row.row_id}/>
           ))}
           <TableRow>
             <TableCell 
-            colSpan={10} 
+            colSpan={10}
             align='right'
             sx={{padding:'4px 8px'}}
             >Total</TableCell>
-            <TableCell sx={{padding:'4px 8px'}}>
-              <TextField 
+            <TableCell
+            align='right' 
+            sx={{padding:'4px 8px'}}>
+              <TextField
               className='table-field'
               data-fieldid = "totalAmount"
               value={total}/>
