@@ -7,6 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import InvoiceTable from "./InvoiceTable";
 import {v4 as uuidv4} from 'uuid';
+import { DateTime } from "luxon";
 
 const invoiceModalStyle = modalStyle;
 invoiceModalStyle['display'] = 'flex';
@@ -24,13 +25,33 @@ const invoiceDetailsGrid = {
 const InvoiceModal = ({open, handleClose})=>{
     const [customerDetails, setCustomerDetails] = useState([]);
     const [choosenCustomer, setChoosenCustomer] = useState('');
-    const [input, setInput] = useState('');
+    const [input, setInput] = useState(''); //its the customer search field
     const [searchActive, setSearchActive] = useState(false);
-    const [itemDetails, setItemDetails] = useState([]);
-    const [itemSearchInput, setItemSearchInput] = useState('');
+    const [itemDetails, setItemDetails] = useState([]); //this is where the customers name get stored while searching
+    const [itemSearchInput, setItemSearchInput] = useState(''); //it's the state for search field
     const [itemSearchActive, setItemSearchActive] = useState(false);
     const [rows, setRows] = useState([]);
     const [total, setTotal] = useState(0);
+    const [invoiceNum, setInvoiceNum] = useState(0);
+    const [invoiceDate, setInvoiceDate] = useState(DateTime.now().toFormat('yyyy-LL-dd'));
+
+    function handleInvoiceNum(e){
+        setInvoiceNum(e.target.value);
+    }
+
+    async function getNextInvoiceNumber(){
+        const response = await fetch('http://localhost:3001/powerinvoice/invoices/nextInvoiceNumber', {mode:'cors'});
+        const invoiceNumber = await response.json();
+        setInvoiceNum(invoiceNumber.data+1);
+    }
+
+    useEffect(()=>{
+        getNextInvoiceNumber();
+    },[])
+
+    function handleInvoiceDate(e){
+        setInvoiceDate(e.target.value);
+    }
 
     async function searchCustomer(){
         const response = await fetch(`http://localhost:3001/powerinvoice/customers/search?text=${input}`, {mode:'cors'});
@@ -149,6 +170,23 @@ const InvoiceModal = ({open, handleClose})=>{
         }
     }, [itemSearchInput]);
 
+    async function saveInvoice(){
+        const payload = await fetch('http://localhost:3001/powerinvoice/invoices',{
+            method: 'POST',
+            headers:{"Content-Type":"application/json"},
+            mode:'cors',
+            body:JSON.stringify({
+                invoiceNumber:`${invoiceNum}`, 
+                invoiceDate:`${invoiceDate}`,
+                customer:`${choosenCustomer[0]._id}`,
+                purchasedItems:`${JSON.stringify(rows)}`,
+                total:`${total}`,
+            }),
+        });
+        const response = await payload.json();
+        console.log(response);
+    }
+
     return(
         <Modal open={open}>
             <Box sx={invoiceModalStyle}>
@@ -177,8 +215,8 @@ const InvoiceModal = ({open, handleClose})=>{
                     </List>
                 </Box>
                 <Box sx={invoiceDetailsGrid}>
-                    <TextField type="text" value="0" id="invoiceNumber" label="Invoice No" focused/>
-                    <TextField type="date" label="Invoice Date" id="invoiceDate" focused/>
+                    <TextField type="text" value={invoiceNum} id="invoiceNumber" label="Invoice No" onChange={handleInvoiceNum} focused/>
+                    <TextField type="date" value={invoiceDate} label="Invoice Date" id="invoiceDate" onChange={handleInvoiceDate} focused/>
                     <TextField type="text" value={choosenCustomer&&choosenCustomer[0].name} id="customerNameField" label="Customer Name" focused/>
                     <TextField type="text" multiline id="customerAddress" rows={4} value={choosenCustomer&&choosenCustomer[0].address} label="Address" focused/>
                     <TextField type="text" id="customerGst" value={choosenCustomer&&choosenCustomer[0].gstNumber} label="GST no" focused/>
@@ -209,7 +247,11 @@ const InvoiceModal = ({open, handleClose})=>{
                     </List>
                 </Box>
                 <InvoiceTable rows={rows} getRows = {getRows} total={total} deleteRowItem={deleteRowItem}/>
-                <Button onClick={handleClose} variant="outlined">Close</Button>
+                <Box sx={{display:'flex', gap: '10px', justifyContent:'end'}}>
+                    <Button variant="outlined" onClick={saveInvoice}>Save</Button>
+                    <Button variant="outlined">Print</Button>
+                    <Button onClick={handleClose} variant="outlined">Close</Button>
+                </Box>
             </Box>
         </Modal>
     );
