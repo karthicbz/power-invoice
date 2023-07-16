@@ -63,6 +63,7 @@ const InvoiceModal = ({open, handleClose})=>{
         setInput(e.target.value);
     }
 
+    //this one removes list item from customer search and set customer fields to empty
     useEffect(()=>{
         // console.log(input);
         if(input === ''){
@@ -82,6 +83,7 @@ const InvoiceModal = ({open, handleClose})=>{
             setSearchActive(false);
             setItemDetails([]);
             setRows([]);
+            setInvoiceNum(0);
         }
     },[input, open])
 
@@ -152,7 +154,7 @@ const InvoiceModal = ({open, handleClose})=>{
         setRows(updatedRows);
     }
 
-    function getRows(id, prop, value){
+    function updateRowItem(id, prop, value){
         // console.log(`id:${id}, prop:${prop}, value:${value}`);
         if(prop !== 'product'){
             value = parseFloat(value);
@@ -161,6 +163,7 @@ const InvoiceModal = ({open, handleClose})=>{
         setRows(prevRows=>prevRows.map(item=>item.id === id?{...item, [prop]:value}:item));
     }
 
+    //this one removes list item from products search
     useEffect(()=>{
         if(itemSearchInput === ''){
             setItemDetails([]);
@@ -184,7 +187,10 @@ const InvoiceModal = ({open, handleClose})=>{
             }),
         });
         const response = await payload.json();
-        console.log(response);
+        // console.log(response);
+        if(response.status === 'success'){
+            getNextInvoiceNumber();
+        }
     }
 
     return(
@@ -246,7 +252,7 @@ const InvoiceModal = ({open, handleClose})=>{
                         }
                     </List>
                 </Box>
-                <InvoiceTable rows={rows} getRows = {getRows} total={total} deleteRowItem={deleteRowItem}/>
+                <InvoiceTable rows={rows} updateRowItem = {updateRowItem} total={total} deleteRowItem={deleteRowItem}/>
                 <Box sx={{display:'flex', gap: '10px', justifyContent:'end'}}>
                     <Button variant="outlined" onClick={saveInvoice}>Save</Button>
                     <Button variant="outlined">Print</Button>

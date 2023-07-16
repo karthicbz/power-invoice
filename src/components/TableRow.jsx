@@ -4,7 +4,7 @@ import TableRow from '@mui/material/TableRow';
 import { useEffect, useState } from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-const TableRowComponent = ({row, getRows, deleteRowItem})=>{
+const TableRowComponent = ({row, updateRowItem, deleteRowItem})=>{
     const [productName, setProductName] = useState(row.product);
     const [hsn, sethsn] = useState(row.hsn);
     const [rate, setRate] = useState(row.rate);
@@ -30,19 +30,19 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
     },[rate, qty]);
 
     useEffect(()=>{
-        getRows(row.id, 'amount', amount);
+        updateRowItem(row.id, 'amount', amount);
     },[amount]);
 
     useEffect(()=>{
-        getRows(row.id, 'cgstAmt', cgstAmt);
+        updateRowItem(row.id, 'cgstAmt', cgstAmt);
     },[cgstAmt]);
 
     useEffect(()=>{
-        getRows(row.id, 'sgstAmt', sgstAmt);
+        updateRowItem(row.id, 'sgstAmt', sgstAmt);
     },[sgstAmt]);
 
     useEffect(()=>{
-        getRows(row.id, 'igstAmt', igstAmt);
+        updateRowItem(row.id, 'igstAmt', igstAmt);
     },[igstAmt]);
 
     return(
@@ -58,7 +58,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
             className='table-field'
             onChange={(e)=>{
                 setProductName(e.target.value);
-                getRows(row.id, 'product', e.target.value);
+                updateRowItem(row.id, 'product', e.target.value);
             }}/>
             </TableCell>
             <TableCell align="right" sx={{padding:'4px 8px'}}>
@@ -68,7 +68,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
             className='table-field'
             onChange={(e)=>{
                 sethsn(e.target.value);
-                getRows(row.id, 'hsn', e.target.value);
+                updateRowItem(row.id, 'hsn', e.target.value);
             }}/></TableCell>
             <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
@@ -77,7 +77,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
             className='table-field'
             onChange={(e)=>{
                 setRate(e.target.value)
-                getRows(row.id, 'rate', e.target.value);
+                updateRowItem(row.id, 'rate', e.target.value);
             }}/></TableCell>
             <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
@@ -86,7 +86,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
             className='table-field'
             onChange={(e)=>{
                 setQty(e.target.value);
-                getRows(row.id, 'qty', e.target.value);
+                updateRowItem(row.id, 'qty', e.target.value);
             }}/></TableCell>
             <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField
@@ -96,7 +96,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
             onChange={(e)=>{
                 setCgstPer(e.target.value);
                 setCgstAmt(((rate*qty)*(e.target.value/100)).toFixed(2));
-                getRows(row.id, 'cgstPer', e.target.value);
+                updateRowItem(row.id, 'cgstPer', e.target.value);
                 }}/></TableCell>
             <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField 
@@ -111,7 +111,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
             onChange={(e)=>{
                 setSgstPer(e.target.value);
                 setSgstAmt(((rate*qty)*(e.target.value/100)).toFixed(2));
-                getRows(row.id, 'sgstPer', e.target.value);
+                updateRowItem(row.id, 'sgstPer', e.target.value);
                 }}/></TableCell>
             <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField 
@@ -125,7 +125,7 @@ const TableRowComponent = ({row, getRows, deleteRowItem})=>{
             onChange={(e)=>{
                 setIgstPer(e.target.value);
                 setIgstAmt(((rate*qty)*(e.target.value/100)).toFixed(2));
-                getRows(row.id, 'igstPer', e.target.value);
+                updateRowItem(row.id, 'igstPer', e.target.value);
                 }}/></TableCell>
             <TableCell align="right" sx={{padding:'4px 8px'}}>
             <TextField 

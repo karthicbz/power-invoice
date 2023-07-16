@@ -11,7 +11,7 @@ import { useState, useEffect } from 'react';
 import TableRowComponent from './TableRow';
 import { TextField } from '@mui/material';
 
-const InvoiceTable = ({rows, getRows, total, deleteRowItem})=>{
+const InvoiceTable = ({rows, updateRowItem, total, deleteRowItem})=>{
   
     return(
     <TableContainer component={Paper}>
@@ -33,7 +33,7 @@ const InvoiceTable = ({rows, getRows, total, deleteRowItem})=>{
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRowComponent row={row} getRows={getRows} deleteRowItem={deleteRowItem} key={row.row_id}/>
+            <TableRowComponent row={row} updateRowItem={updateRowItem} deleteRowItem={deleteRowItem} key={row.row_id}/>
           ))}
           <TableRow>
             <TableCell 
