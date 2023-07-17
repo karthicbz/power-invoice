@@ -8,6 +8,9 @@ import ListItemText from '@mui/material/ListItemText';
 import InvoiceTable from "./InvoiceTable";
 import {v4 as uuidv4} from 'uuid';
 import { DateTime } from "luxon";
+// import invoice from "../scripts/makeInvoice";
+import easyinvoice from "easyinvoice";
+// import invoiceTemplate from '../templates/invoice_template.html';
 
 const invoiceModalStyle = modalStyle;
 invoiceModalStyle['display'] = 'flex';
@@ -34,15 +37,20 @@ const InvoiceModal = ({open, handleClose})=>{
     const [total, setTotal] = useState(0);
     const [invoiceNum, setInvoiceNum] = useState(0);
     const [invoiceDate, setInvoiceDate] = useState(DateTime.now().toFormat('yyyy-LL-dd'));
+    const [invoiceData, setInvoiceData] = useState({});
 
     function handleInvoiceNum(e){
         setInvoiceNum(e.target.value);
     }
 
     async function getNextInvoiceNumber(){
-        const response = await fetch('http://localhost:3001/powerinvoice/invoices/nextInvoiceNumber', {mode:'cors'});
-        const invoiceNumber = await response.json();
-        setInvoiceNum(invoiceNumber.data+1);
+        try{
+            const response = await fetch('http://localhost:3001/powerinvoice/invoices/nextInvoiceNumber', {mode:'cors'});
+            const invoiceNumber = await response.json();
+            setInvoiceNum(invoiceNumber.data+1);
+        }catch(err){
+            console.error(err);
+        }
     }
 
     useEffect(()=>{
@@ -193,6 +201,42 @@ const InvoiceModal = ({open, handleClose})=>{
         }
     }
 
+    async function handleInvoicePrint(){
+        setInvoiceData(
+            {
+            "sender": {
+                "company": "VK Metals Tools and Suppliers",
+                "address": "3/15 Singaravellar street NH-2",
+                "city": "Maraimalai Nagar",
+                "zip": "603209",
+                "country": "GSTIN: 33ABNPE1591Q1Z8",
+            },
+            "products": [
+                {
+                    "quantity": 2,
+                    "description": "Product 1",
+                    "tax-rate": 6,
+                    "price": 33.87
+                },
+                {
+                    "quantity": 4.1,
+                    "description": "Product 2",
+                    "tax-rate": 6,
+                    "price": 12.34
+                },
+                {
+                    "quantity": 4.5678,
+                    "description": "Product 3",
+                    "tax-rate": 21,
+                    "price": 6324.453456
+                }
+            ],
+        }
+        )
+        const result = await easyinvoice.createInvoice(invoiceData);
+        easyinvoice.print(result.pdf);
+    }
+
     return(
         <Modal open={open}>
             <Box sx={invoiceModalStyle}>
@@ -255,7 +299,7 @@ const InvoiceModal = ({open, handleClose})=>{
                 <InvoiceTable rows={rows} updateRowItem = {updateRowItem} total={total} deleteRowItem={deleteRowItem}/>
                 <Box sx={{display:'flex', gap: '10px', justifyContent:'end'}}>
                     <Button variant="outlined" onClick={saveInvoice}>Save</Button>
-                    <Button variant="outlined">Print</Button>
+                    <Button variant="outlined" onClick={handleInvoicePrint}>Print</Button>
                     <Button onClick={handleClose} variant="outlined">Close</Button>
                 </Box>
             </Box>
