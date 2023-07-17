@@ -39,6 +39,8 @@ const InvoiceModal = ({open, handleClose})=>{
     const [invoiceNum, setInvoiceNum] = useState(0);
     const [invoiceDate, setInvoiceDate] = useState(DateTime.now().toFormat('yyyy-LL-dd'));
     const [invoiceData, setInvoiceData] = useState({});
+    const [paymentId, setPaymentId] = useState('');
+    const [paymentMode, setPaymentMode] = useState('credit');
 
     function handleInvoiceNum(e){
         setInvoiceNum(e.target.value);
@@ -93,6 +95,8 @@ const InvoiceModal = ({open, handleClose})=>{
             setItemDetails([]);
             setRows([]);
             setInvoiceNum(0);
+            setPaymentMode('credit');
+            setPaymentId('');
         }
     },[input, open])
 
@@ -238,6 +242,20 @@ const InvoiceModal = ({open, handleClose})=>{
         easyinvoice.print(result.pdf);
     }
 
+    function handlePaymentMode(e){
+        const paymentId = document.getElementById('payment-id-field');
+        if(e.target.value === 'cheque'){
+            paymentId.placeholder = 'Cheque Number';
+        }else if(e.target.value === 'online'){
+            paymentId.placeholder = 'Transaction Id';
+        }
+        setPaymentMode(e.target.value);
+    }
+
+    function handlePaymentModeInput(e){
+        setPaymentId(e.target.value);
+    }
+
     return(
         <Modal open={open}>
             <Box sx={invoiceModalStyle}>
@@ -299,7 +317,11 @@ const InvoiceModal = ({open, handleClose})=>{
                 </Box>
                 <InvoiceTable rows={rows} updateRowItem = {updateRowItem} total={total} deleteRowItem={deleteRowItem}/>
                 <Box sx={{display:'flex', gap: '10px', justifyContent:'end'}}>
-                    <PaymentMethodSelect/>
+                    <PaymentMethodSelect paymentMode={paymentMode} handlePaymentMode={handlePaymentMode}/>
+                    <TextField placeholder="cheque Number" id="payment-id-field"
+                    value={paymentId}
+                    onChange={handlePaymentModeInput} 
+                    style={paymentMode==='cheque'||paymentMode === 'online'?{display:'block'}:{display:'none'}}></TextField>
                     <Button variant="outlined" onClick={saveInvoice}>Save</Button>
                     <Button variant="outlined" onClick={handleInvoicePrint}>Print</Button>
                     <Button onClick={handleClose} variant="outlined">Close</Button>

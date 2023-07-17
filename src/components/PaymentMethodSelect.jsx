@@ -22,12 +22,12 @@ const PaymentMethodSelect = ({paymentMode, handlePaymentMode})=>{
             value={paymentMode}
             label="Payment Mode"
             onChange={handlePaymentMode}
-            defaultValue={'credit'}
+            // defaultValue={'credit'}
             >
             <MenuItem value={'credit'}>Credit</MenuItem>
             <MenuItem value={'cash '}>Cash</MenuItem>
             <MenuItem value={'cheque'}>Cheque</MenuItem>
-            <MenuItem value={'Online'}>Online</MenuItem>
+            <MenuItem value={'online'}>Online</MenuItem>
             </Select>
         </FormControl>
         </Box>
