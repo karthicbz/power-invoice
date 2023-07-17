@@ -10,6 +10,7 @@ import {v4 as uuidv4} from 'uuid';
 import { DateTime } from "luxon";
 // import invoice from "../scripts/makeInvoice";
 import easyinvoice from "easyinvoice";
+import PaymentMethodSelect from "./PaymentMethodSelect";
 // import invoiceTemplate from '../templates/invoice_template.html';
 
 const invoiceModalStyle = modalStyle;
@@ -298,6 +299,7 @@ const InvoiceModal = ({open, handleClose})=>{
                 </Box>
                 <InvoiceTable rows={rows} updateRowItem = {updateRowItem} total={total} deleteRowItem={deleteRowItem}/>
                 <Box sx={{display:'flex', gap: '10px', justifyContent:'end'}}>
+                    <PaymentMethodSelect/>
                     <Button variant="outlined" onClick={saveInvoice}>Save</Button>
                     <Button variant="outlined" onClick={handleInvoicePrint}>Print</Button>
                     <Button onClick={handleClose} variant="outlined">Close</Button>
